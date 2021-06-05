@@ -16,9 +16,9 @@ class DatabaseService {
     });
   }
 
-  Future updatePlayer(String player, String bio, String name, String age,
+  Future updatePlayer(String id, String bio, String name, String age,
       String country, String runs) async {
-    return await playerCollection.doc(player).update({
+    return await playerCollection.doc(id).update({
       'bio': bio,
       'name': name,
       'age': age,
@@ -27,8 +27,8 @@ class DatabaseService {
     });
   }
 
-  Future deletePlayer(String player) async {
-    return await playerCollection.doc(player).delete();
+  Future deletePlayer(String id) async {
+    return await playerCollection.doc(id).delete();
   }
 
   // get player stream
