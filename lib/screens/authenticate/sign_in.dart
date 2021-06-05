@@ -12,6 +12,10 @@ class _SignInState extends State<SignIn> {
   // get AuthService instance
   final AuthService _authService = AuthService();
 
+  // text field state
+  String _email = '';
+  String _password = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,19 +27,56 @@ class _SignInState extends State<SignIn> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-        child: ElevatedButton(
-          child: Text('Sign In Anonymously'),
-          onPressed: () async {
-            dynamic result = await _authService.signInAnonymously();
-
-            if (result == null) {
-              print('Error Signing In');
-            } else {
-              print('Signed In');
-              print(result.uid);
-            }
-          },
+        child: Form(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 20.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                onChanged: (value) {
+                  setState(() => _email = value);
+                },
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() => _password = value);
+                },
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              ElevatedButton(
+                child: Text('Sign in'),
+                onPressed: () async {
+                  print(_email);
+                  print(_password);
+                },
+              )
+            ],
+          ),
         ),
+
+        // Old anonymous sign in button
+        // ElevatedButton(
+        //   child: Text('Sign In Anonymously'),
+        //   onPressed: () async {
+        //     dynamic result = await _authService.signInAnonymously();
+        //
+        //     if (result == null) {
+        //       print('Error Signing In');
+        //     } else {
+        //       print('Signed In');
+        //       print(result.uid);
+        //     }
+        //   },
+        // ),
       ),
     );
   }
