@@ -12,6 +12,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   // get AuthService instance
   final AuthService _authService = AuthService();
+  // form key
+  final _formKey = GlobalKey<FormState>();
 
   // text field state
   String _email = '';
@@ -38,6 +40,7 @@ class _SignInState extends State<SignIn> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               SizedBox(

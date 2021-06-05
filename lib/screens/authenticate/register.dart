@@ -12,6 +12,8 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   // get AuthService instance
   final AuthService _authService = AuthService();
+  // form key
+  final _formKey = GlobalKey<FormState>();
 
   // text field state
   String _email = '';
@@ -38,6 +40,7 @@ class _RegisterState extends State<Register> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -45,6 +48,13 @@ class _RegisterState extends State<Register> {
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Email'),
+                // validator: (value) => value!.isEmpty ? 'Enter an email' : null,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter an email';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() => _email = value);
                 },
@@ -55,6 +65,12 @@ class _RegisterState extends State<Register> {
               TextFormField(
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
+                validator: (value) {
+                  if (value!.length < 6) {
+                    return 'Password should be at least 6 characters long ';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() => _password = value);
                 },
@@ -65,8 +81,10 @@ class _RegisterState extends State<Register> {
               ElevatedButton(
                 child: Text('Register'),
                 onPressed: () async {
-                  print(_email);
-                  print(_password);
+                  if (_formKey.currentState!.validate()) {
+                    print(_email);
+                    print(_password);
+                  } else {}
                 },
               )
             ],
