@@ -1,4 +1,5 @@
 import 'package:cricket_users_app/services/database.dart';
+import 'package:cricket_users_app/shared/loading.dart';
 import 'package:flutter/material.dart';
 
 class ViewPlayer extends StatefulWidget {
@@ -29,6 +30,8 @@ class _ViewPlayerState extends State<ViewPlayer> {
 
   bool _loading = false;
   bool _isEdit = false;
+
+  String _appBarTitle = 'View Player';
 
   String _bio = '';
   String _name = '';
@@ -144,7 +147,7 @@ class _ViewPlayerState extends State<ViewPlayer> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('View Player'),
+        title: Text(_appBarTitle),
         actions: <Widget>[
           Visibility(
             visible: !_isEdit,
@@ -152,7 +155,10 @@ class _ViewPlayerState extends State<ViewPlayer> {
               icon: Icon(Icons.edit),
               label: Text('Edit'),
               onPressed: () {
-                setState(() => _isEdit = true);
+                setState(() {
+                  _isEdit = true;
+                  _appBarTitle = 'Update Player';
+                });
               },
             ),
           ),
@@ -160,85 +166,91 @@ class _ViewPlayerState extends State<ViewPlayer> {
             visible: _isEdit,
             child: ElevatedButton.icon(
               icon: Icon(Icons.cancel),
-              label: Text('Cancle'),
+              label: Text('Cancel'),
               onPressed: () {
-                setState(() => _isEdit = false);
+                setState(() {
+                  _isEdit = false;
+                  _appBarTitle = 'View Player';
+                });
               },
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 100, horizontal: 50),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                _buildBio(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildName(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildAge(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildCountry(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                _buildRuns(),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Visibility(
-                  visible: _isEdit,
-                  child: ElevatedButton(
-                    child: Text('Update Player'),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() => _loading = true);
+      body: _loading
+          ? Loading()
+          : SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 100, horizontal: 50),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      _buildBio(),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      _buildName(),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      _buildAge(),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      _buildCountry(),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      _buildRuns(),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Visibility(
+                        visible: _isEdit,
+                        child: ElevatedButton(
+                          child: Text('Update Player'),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() => _loading = true);
 
-                        _formKey.currentState!.save();
+                              _formKey.currentState!.save();
 
-                        dynamic result = await _databaseService.updatePlayer(
-                            widget.id, _bio, _name, _age, _country, _runs);
+                              dynamic result =
+                                  await _databaseService.updatePlayer(widget.id,
+                                      _bio, _name, _age, _country, _runs);
 
-                        setState(() => _loading = false);
-                        Navigator.pop(context);
-                      }
-                    },
+                              setState(() => _loading = false);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ),
+                      Visibility(
+                        visible: !_isEdit,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                          child: Text('Delete Player'),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() => _loading = true);
+
+                              dynamic result = await _databaseService
+                                  .deletePlayer(widget.id);
+
+                              if (result == null) {
+                                setState(() => _loading = false);
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Visibility(
-                  visible: !_isEdit,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
-                    child: Text('Delete Player'),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() => _loading = true);
-
-                        dynamic result =
-                            await _databaseService.deletePlayer(widget.id);
-
-                        if (result == null) {
-                          setState(() => _loading = false);
-                          Navigator.pop(context);
-                        }
-                      }
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
