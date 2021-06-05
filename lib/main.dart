@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Wrapper(),
         '/add': (context) => AddPlayer(),
-        '/view': (context) => ViewPlayer()
       },
     );
   }
