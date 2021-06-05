@@ -18,6 +18,7 @@ class _SignInState extends State<SignIn> {
   // text field state
   String _email = '';
   String _password = '';
+  String _error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,14 @@ class _SignInState extends State<SignIn> {
                 height: 20.0,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration:
+                    InputDecoration(hintText: 'Email', labelText: 'Email'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter an email';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() => _email = value);
                 },
@@ -56,8 +64,15 @@ class _SignInState extends State<SignIn> {
                 height: 20.0,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                    hintText: 'Password', labelText: 'Password'),
                 obscureText: true,
+                validator: (value) {
+                  if (value!.length < 6) {
+                    return 'Password should be at least 6 characters long ';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() => _password = value);
                 },
@@ -68,10 +83,23 @@ class _SignInState extends State<SignIn> {
               ElevatedButton(
                 child: Text('Sign in'),
                 onPressed: () async {
-                  print(_email);
-                  print(_password);
+                  if (_formKey.currentState!.validate()) {
+                    dynamic result =
+                        await _authService.signIn(_email, _password);
+
+                    if (result == null) {
+                      setState(() => _error = 'Invalid Email or Password!');
+                    }
+                  }
                 },
-              )
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              Text(
+                _error,
+                style: TextStyle(color: Colors.red, fontSize: 14.0),
+              ),
             ],
           ),
         ),

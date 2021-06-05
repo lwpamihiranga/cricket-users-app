@@ -48,7 +48,8 @@ class _RegisterState extends State<Register> {
                 height: 20.0,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration:
+                    InputDecoration(hintText: 'Email', labelText: 'Email'),
                 // validator: (value) => value!.isEmpty ? 'Enter an email' : null,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -64,7 +65,8 @@ class _RegisterState extends State<Register> {
                 height: 20.0,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                    hintText: 'Password', labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value!.length < 6) {
@@ -87,7 +89,7 @@ class _RegisterState extends State<Register> {
                         await _authService.register(_email, _password);
 
                     if (result == null) {
-                      setState(() => _error = 'Invalid Email or Passowrd!');
+                      setState(() => _error = 'Invalid Email or Password!');
                     }
                   }
                 },
