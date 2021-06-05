@@ -2,7 +2,8 @@ import 'package:cricket_users_app/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  final Function toggleView;
+  const SignIn({Key? key, required this.toggleView}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -24,6 +25,15 @@ class _SignInState extends State<SignIn> {
         // backgroundColor: Colors.brown[400],
         // elevation: 0.0,
         title: Text('Sign In'),
+        actions: <Widget>[
+          ElevatedButton.icon(
+            icon: Icon(Icons.person),
+            label: Text('Register'),
+            onPressed: () {
+              widget.toggleView();
+            },
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
