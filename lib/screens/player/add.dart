@@ -103,59 +103,74 @@ class _AddPlayerState extends State<AddPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Player'),
-      ),
-      body: _loading
-          ? Loading()
-          : SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 100, horizontal: 50),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      _buildBio(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildName(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildAge(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildCountry(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildRuns(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      ElevatedButton(
-                        child: Text('Add Player'),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() => _loading = true);
-
-                            dynamic result = await _databaseService.addPlayer(
-                                _bio, _name, _age, _country, _runs);
-
-                            if (result == null) {
-                              setState(() => _loading = false);
-                              Navigator.pop(context);
-                            }
-                          }
-                        },
-                      )
-                    ],
+        appBar: AppBar(
+          backgroundColor: Color(0x570d0600),
+          title: Text('Add Player'),
+        ),
+        body: _loading
+            ? Loading()
+            : Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('background.jpg'),
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
                   ),
                 ),
-              ),
-            ),
-    );
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 100, horizontal: 50),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          _buildBio(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildName(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildAge(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildCountry(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildRuns(),
+                          SizedBox(
+                            height: 120.0,
+                          ),
+                          ElevatedButton(
+                            child: Text('Add Player'),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() => _loading = true);
+
+                                dynamic result =
+                                    await _databaseService.addPlayer(
+                                        _bio, _name, _age, _country, _runs);
+
+                                if (result == null) {
+                                  setState(() => _loading = false);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.green,
+                                elevation: 3,
+                                padding: EdgeInsets.all(15)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ));
   }
 }

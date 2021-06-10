@@ -146,111 +146,149 @@ class _ViewPlayerState extends State<ViewPlayer> {
     final DatabaseService _databaseService = DatabaseService();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_appBarTitle),
-        actions: <Widget>[
-          Visibility(
-            visible: !_isEdit,
-            child: ElevatedButton.icon(
-              icon: Icon(Icons.edit),
-              label: Text('Edit'),
-              onPressed: () {
-                setState(() {
-                  _isEdit = true;
-                  _appBarTitle = 'Update Player';
-                });
-              },
-            ),
-          ),
-          Visibility(
-            visible: _isEdit,
-            child: ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text('Cancel'),
-              onPressed: () {
-                setState(() {
-                  _isEdit = false;
-                  _appBarTitle = 'View Player';
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-      body: _loading
-          ? Loading()
-          : SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 100, horizontal: 50),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      _buildBio(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildName(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildAge(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildCountry(),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      _buildRuns(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Visibility(
-                        visible: _isEdit,
-                        child: ElevatedButton(
-                          child: Text('Update Player'),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() => _loading = true);
-
-                              _formKey.currentState!.save();
-
-                              dynamic result =
-                                  await _databaseService.updatePlayer(widget.id,
-                                      _bio, _name, _age, _country, _runs);
-
-                              setState(() => _loading = false);
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: !_isEdit,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
-                          child: Text('Delete Player'),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() => _loading = true);
-
-                              dynamic result = await _databaseService
-                                  .deletePlayer(widget.id);
-
-                              if (result == null) {
-                                setState(() => _loading = false);
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+        appBar: AppBar(
+          backgroundColor: Color(0x570d0600),
+          title: Text(_appBarTitle),
+          actions: <Widget>[
+            Visibility(
+              visible: !_isEdit,
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.edit),
+                label: Text('Edit'),
+                onPressed: () {
+                  setState(() {
+                    _isEdit = true;
+                    _appBarTitle = 'Update Player';
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0x570d0600),
+                    //border width and color
+                    elevation: 3,
+                    //elevation of button
+                    padding: EdgeInsets.all(20) //content padding inside button
+                    ),
               ),
             ),
-    );
+            Visibility(
+              visible: _isEdit,
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.cancel),
+                label: Text('Cancel'),
+                onPressed: () {
+                  setState(() {
+                    _isEdit = false;
+                    _appBarTitle = 'View Player';
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0x570d0600),
+                    //border width and color
+                    elevation: 3,
+                    //elevation of button
+                    padding: EdgeInsets.all(20) //content padding inside button
+                    ),
+              ),
+            ),
+          ],
+        ),
+        body: _loading
+            ? Loading()
+            : Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('background.jpg'),
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 100, horizontal: 50),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          _buildBio(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildName(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildAge(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildCountry(),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          _buildRuns(),
+                          SizedBox(
+                            height: 120.0,
+                          ),
+                          Visibility(
+                            visible: _isEdit,
+                            child: ElevatedButton(
+                              child: Text('Update Player'),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() => _loading = true);
+
+                                  _formKey.currentState!.save();
+
+                                  dynamic result =
+                                      await _databaseService.updatePlayer(
+                                          widget.id,
+                                          _bio,
+                                          _name,
+                                          _age,
+                                          _country,
+                                          _runs);
+
+                                  setState(() => _loading = false);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blue,
+                                elevation: 3,
+                                padding: EdgeInsets.all(15),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: !_isEdit,
+                            child: ElevatedButton(
+                              child: Text('Delete Player'),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() => _loading = true);
+
+                                  dynamic result = await _databaseService
+                                      .deletePlayer(widget.id);
+
+                                  if (result == null) {
+                                    setState(() => _loading = false);
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                elevation: 3,
+                                padding: EdgeInsets.all(15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ));
   }
 }
