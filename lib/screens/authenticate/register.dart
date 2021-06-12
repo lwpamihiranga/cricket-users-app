@@ -28,7 +28,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Color(0xdd4c8c50),
           title: Text('Sign Up'),
@@ -51,13 +51,13 @@ class _RegisterState extends State<Register> {
         ),
         body: _loading
             ? Loading()
-            :
-        Container(
+            : Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('background.jpg'),
                     fit: BoxFit.cover,
-                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                    colorFilter: new ColorFilter.mode(
+                        Colors.black.withOpacity(0.7), BlendMode.dstATop),
                   ),
                 ),
                 child: Container(
@@ -129,6 +129,35 @@ class _RegisterState extends State<Register> {
                                     _error = 'Invalid Email or Password!';
                                   });
                                 }
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 12.0,
+                        ),
+                        SizedBox(
+                          // height: 100, //height of button
+                          width: 390, //width of button
+                          child: ElevatedButton(
+                            child: Text('Login as Anonymous'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0x572984AD),
+                                elevation: 3,
+                                //elevation of button
+                                padding: EdgeInsets.all(
+                                    20) //content padding inside button
+                                ),
+                            onPressed: () async {
+                              setState(() => _loading = true);
+                              dynamic result =
+                                  await _authService.signInAnonymously();
+
+                              if (result == null) {
+                                setState(() {
+                                  _loading = false;
+                                  _error = 'Sorry! Error Occurred!';
+                                });
                               }
                             },
                           ),

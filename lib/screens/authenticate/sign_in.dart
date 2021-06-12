@@ -56,7 +56,8 @@ class _SignInState extends State<SignIn> {
                 image: DecorationImage(
                   image: AssetImage('background.jpg'),
                   fit: BoxFit.cover,
-                  colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                  colorFilter: new ColorFilter.mode(
+                      Colors.black.withOpacity(0.7), BlendMode.dstATop),
                 ),
               ),
               child: Container(
@@ -142,21 +143,6 @@ class _SignInState extends State<SignIn> {
                     ],
                   ),
                 ),
-
-                // Old anonymous sign in button
-                // ElevatedButton(
-                //   child: Text('Sign In Anonymously'),
-                //   onPressed: () async {
-                //     dynamic result = await _authService.signInAnonymously();
-                //
-                //     if (result == null) {
-                //       print('Error Signing In');
-                //     } else {
-                //       print('Signed In');
-                //       print(result.uid);
-                //     }
-                //   },
-                // ),
               ),
             ),
     );
